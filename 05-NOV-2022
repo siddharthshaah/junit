@@ -1,0 +1,181 @@
+JUnit5
+JUnit5 has been modularized and distributed as 3 independent modules
+1. JUnit Platform
+2. JUnit Jupiter
+3. JUnit Vintage
+
+#1. JUnit5 Test execution lifecycle
+
+package com.ju5.core;
+class NumberService {
+	public long sumOfnOddNumbers(int n) {
+		int i=0;
+		int c = 0;
+		long sum = 0;
+		
+		while(c < n) {
+			if(i %2 != 0) {
+				sum +=i;
+				c++;
+			}
+			i++;
+		}
+	}
+}
+
+class NumberServiceTest {
+	NumberService numberService;
+	
+	@BeforeEach
+	public void setUp() {
+		numberService = new NumberService();
+	}
+	
+	@Test
+	public void testSumOfNOddNumbers() {
+		int n = 5;
+		long expectedSum = 25;
+		
+		long actualSum = numberService.sumOfnOddNumbers(n);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@AfterEach
+	public void tearDown() {
+		numberService = null;
+	}
+}
+
+#1 TestLifecycle
+How does a testcase class and the test methods will execute by default?
+when we pass the testcase class as an input to the TestRunner asking to execute the testMethods
+1. before executing each testMethod, the TestRunner instantiates a new object of the TestCase class
+2. then executes @BeforeEach method ontop of the Testcase object it created
+3. executes testMethod() 
+4. then executes the @AfterEach method 
+5. destroys the TestCase object
+This pattern of running the TestCases is called OBJECT PER_METHOD lifecycle 
+
+But in JUnit5 we can choose the Test execution lifecycle whether we wanted one object per the whole testexecution or object per method using @TestInstance
+
+@TestInstance(Lifecycle.PER_CLASS/Lifecycle.PER_METHOD)
+class NumberServiceTest {
+
+}
+
+
+#2 Test Fixture Methods
+There are total 4 test fixture methods are there categorized into 2 groups
+1. per class to carry one-time operations
+@BeforeAll
+@AfterAll
+In case of JUnit4, the above 2 methods are @BeforeClass, @AfterClass, these methods gets executed only once per the lifetime of the entire TestCase class. To ensure these methods are invoked only once on the Class reference, the JUnit Testrunner executes these methods immediately upon loading the class into the JVM memory even much before instantiating the class
+So to invoke these methods before the object, these methods must be static
+	
+whereas when it comes to JUnit5, there are 2 test execution lifecycles are there
+1. PER_CLASS
+in case of per class, only one object of the TestCase class will be created and will be used for executing all the test methods. So in this case the @BeforeAll and @AfterAll methods will be invoked upon creating the object of the TestClass or while destroying the object so these methods dont need be static
+	
+2. PER_METHOD
+in case of per method, for each testMethod execution it creates a new object, so to ensure @BeforeAll, @AfterAll is being executed only once, these methods are executed immediately after loading the class into jvm memory, so these methods must and should be static	
+	
+2. per method to perform intialization/destruction per each testmethod execution
+@BeforeEach
+@AfterEach
+
+
+#3 Test Method execution order
+Typically the order in which the testMethods executes should not matter, since these are unit testcases which are independent of each other. but few times we wanted to enforce the order in which these testMethods executes for eg.. incase of integrationTests or functional tests while applying Lifeycycle.PER_CLASS
+
+The default test method execution order is in the declared order from top-down approach
+In JUnit5 we can control the order of execution of these test methods by using
+@TestMethodOrder(MethodOrderer.*)
+This annotation has to be written at the class level to which we need to pass the order strategy we have choosen
+	
+1. MethodOrderer.DisplayName
+2. MethodOrderer.MethodName = sorted by methodName order
+3. MethodOrderer.OrderAnnotation = based on @Order annotation
+4. MethodOrderer.Random = randomly execute
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation)
+class CalculatorTest {
+	
+	@Test
+	@Order(2)
+	public void testAddWithPositiveNumbers() {}
+	
+	@Test
+	@Order(1)
+	public void testAddWithNegativeNumbers() {}
+
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

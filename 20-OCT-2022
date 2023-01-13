@@ -1,0 +1,125 @@
+JUnit 
+JUnit is an unit testing automation framework that is used for testing the actual code to certify whether it is working properly or not
+
+
+Unit testing = is the process of testing & certifying the code written by the developer by himself to ensure the code he is delivering is tested/verified and meets the quality criteria. Unittesting automation became integral part of ci/cd implementation.
+	
+class Calculator {
+	public int add(int a, int b) {
+		return a+b;
+	}
+}	
+
+class App {
+	public static void main(String[] args) {
+		Calculator calculator = new Calculator();
+		int sum = calculator.add(10, 20);
+		sop("sum : " + sum);
+	}
+}
+
+testing = testing is the process of verifying the code with pre-defined inputs (test fixture) and verifying the output produced by the original code is matching with the expected output or not is called "testing"
+	
+An unit test automation code should execute the actual code with pre-defined set of inputs and capture the output and evaluate the actual output produced is matching with expected output or not and produce a test result as pass/fail is called "unit test automation"
+	
+To implement the unit test automation in java, The JUnit Framework has been provided. The developers can use JUnit in quickly producing the testautomation code
+
+class Calculator {
+	public int add(int a, int b) {
+		return a + b;
+	}
+}
+
+
+class CalculatorTest {
+	Calculator calculator;
+	int a;
+	int b;
+	int expectedSum;
+	int na;
+	int nb;
+	int nexpectedSum;
+	
+	@Before
+	public void setup() {
+		calculator = new Calculator();
+		a = 10;
+		b = 20;		
+		expectedSum = 30;
+		na=-10;
+		nb=-1;
+		nexpectedSum=-11;
+	}
+
+	@Test
+	public void testAddPositiveNumbers() {
+		int actualSum = 0;
+		actualSum = calculator.add(a, b);
+		Assert.assertEquals(expectedSum, actualSum);
+	}
+	
+	@Test
+	public void testAddNegativeNumbers() {
+		int actualSum = 0;
+		actualSum = calculator.add(na, nb);
+		Assert.assertEquals(nexpectedSum, actualSum);
+	}
+	
+	@After
+	public void cleanUp() {
+		calculator = null;
+	}
+	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

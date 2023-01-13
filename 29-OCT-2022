@@ -1,0 +1,168 @@
+What is the difference between Software Configuration Management vs Infrastructure Automation Tools?
+1. Mutable vs Immutable infrastructure
+Mutable = something that can be changed
+Immutable = something that cannot be changed
+
+When we provision an infrastructure using software configuration management tools like ansible, there after if we have modified the code and re-apply it, the software configuration management tools will update/change the existing infrastructure from the current to the desired system state
+where as if we use iac automation code in provisioning an infrastructure, post provisioning the infrastructure if we have modified the code and re-apply, then rather than updating the existing infrastructure, iac tools will destroy and reprovision the infrastructure from the scratch
+
+we can achieve consistency in reproducing the infrastructure by using iac automation tools rather than software configuration management tools
+
+2. Procedural vs declarative
+Software configuration management tools are procedural, which means we need to write the code/program to achieve the desired system state. 
+For eg.. we wrote a playbook for creating an ec2 instance as below.
+	
+tasks:
+- name: provision ec2
+	amazon.aws.ec2
+		key_name: jkp
+		instance_type: t2.micro
+		image: ami_38383
+		wait: yes
+		group: javaservergroup
+		count: 3
+		vpc_subnet_id: subnet_9383
+		assign_public_ip: yes
+		
+with the above playbook, ansible provisions 3 ec2 instances of t2.micro shape. Now we wanted to have 10 ec2 instances instead of 3, so if we goto playbook and modify the count from 3 to 10 and apply playbook, ansible will create 10 more ec2 instances which accumulates to 13 instances
+
+From this we can understand the software configuration management tools doesnt keeps track of the existing state of infrastructure, these tools cannot determine how many instances are there in the current infrastructure and still how many more instances to be provisioned to meet the defined state, they cannot identify
+
+The programmer has to manually identify the existing resoures and should calculate how many more instances to be provisioned to meet the desired state of the system and has to modify the code accordingly
+
+Instead if we use iac automation code, iac tools keep track of the current state of the infrastructure locally. so that when we make a change in the infrastructure, iac tools compares the latest state of the infrastructure with the code changes we made to identity what best can be done to bring the system to desired state
+
+For eg..
+resource "aws_ec2_instance" "javaserver" {
+	ami: ami-938
+	instance_type: t2.micro
+	count: 3
+}
+after applying the above terraform code, it will provision 3 ec2 instances. now if we want 10 instances, we dont need to find how many instances exits and we dont need to calculate rather simply modify the terraform script to tell we need 10 instances
+
+resource "aws_ec2_instance" "javaserver" {
+	ami: ami-938
+	instance_type: t2.micro
+	count: 10
+}
+then terraform will identify how many instances are there already on the infrastructure how many more instances need to added to bring the system to the desired state and will create only 7 more instances
+-----------------------------------------------------------------------------------------------------------------------
+Terraform
+---------
+
+Terraform is an iac automation tool (infrastructure as code) built by Hashicorp that takes care of provisioning the infrastructure on almost all the cloud platforms available in the market
+- aws
+- gcp
+- azure
+- oci
+- ibm cloud
+etc
+
+How does terraform works?
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

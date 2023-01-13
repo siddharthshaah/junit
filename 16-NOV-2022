@@ -1,0 +1,95 @@
+1. How to create a mock object?
+There are 2 ways are there
+1. through programmatic api
+2. annotations
+
+1. through programmatic api
+we can create an mock object by calling static method on Mockito.mock(Class<?> classType)
+	
+	
+2. 	annotations
+@Mock
+@InjectMocks
+
+
+2. upon creating the mock objects we need to add the behaviour we want to replay through the mock using when() and thenReturn() methods on the mock object
+
+Finder finder = Mockito.mock(Finder.class);
+when(finder.isEven(10)).thenReturn(true);
+
+
+upon adding the behaviour to the mock object, if these expected behaviours are not invoked on the mock during the usage, then mockito will through unnecessary stubbing exception
+To ignore strict stubbing behaviour we can use any one these 2 ways
+1. linient().when(mockObject.method()).thenReturn(value);
+
+2. we can turn off strict stubbing at the global level by using an annotation
+@MockitoSettings(strictness = Strictness.LINIENT)
+------------------------------------------------------------------------------------------------------------------------
+#3. mocking the exceptions
+sometimes the original dependent class methods for a given set of input combinations produces the exception. while mocking the dependent objects, we need to simulate the same exception being reported through the mock as well, this can be achieved using
+
+when(mock.method()).thenThrow(Exception.class);
+------------------------------------------------------------------------------------------------------------------------
+#4. verify mock
+
+
+int[] array = new int[] {10, 9, 21, 6};
+when(finder.isEven(10)).thenReturn(true);
+when(finder.isEven(9)).thenReturn(false);
+
+int actualSum = arrayHelper.sumOfEvens(array);
+
+assertEquals(expectedSum, actualSum);
+
+	
+void
+static
+spy
+final
+method order execution
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

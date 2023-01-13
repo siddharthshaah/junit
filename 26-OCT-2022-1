@@ -1,0 +1,538 @@
+What is testing, how to conduct the testing process?
+testing is the process of verifying the code that is developed with pre-defined set of inputs (test fixture)	execute the code and verify the output returned by the code is matching with the pre-computed output to mark the test has been passed or failed
+
+we cannot achieve 100% automation testing in a system or a application, because to achieve automation testing, the system should produce consistently the same result with the pre-defined set of inputs we are passing, but there are few systems which might produce different results for each execution even though the inputs being passed is same, for eg.. in scientific experimentation, the output of an chemical reaction or a system will vary due to external env factors like temperature, humidty etc. In such systems we cannot perform test automation.
+In such systems we need to conduct manually testing for certifying the system.
+	
+	
+How to conduct automation testing for our code?
+	
+pakcage com.core.utils;
+class Calculator {
+	public int add(int a, int b) {
+		return a + b;
+	}
+}
+
+Testing the above code doesnt mean reading the lines of code, rather we need to execute the above block/method and verify the method is producing the right outcome or not.
+So to execute the above code we need to write testcode
+
+package com.core.test;
+class CalculatorTest {
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		Calculator calculator = new Calculator();
+		int sum = calculator.add(a, b);
+		System.out.println("sum : " + sum);
+	}
+}
+
+In the above block of code we are executing the actual piece of code and capturing the output and printing, which is not the goal of unittesting or any testing process.
+The testcode should not produce the outcome of execution of the original code, the goal of testing is to certify the code that is executed has provided the desired results or not (which is nothing but passed/failed).
+if the testcode is producing the output of executing the original code, again the developer/testengineer has to spend lot of time in evaluating the output produced manually by looking at the inputs to certify the code which is decieving from the goal of automation testing
+
+So in automation testing
+1. always execute the original code with known inputs and precomputed output
+2. capture the outcome of executing the original code and verify whether it is matching with pre-computed output or not and print the test conducted is passed/failed rather than original outcome
+
+package com.core.test;
+class CalculatorTest {
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		Calculator calculator = new Calculator();
+		int actualSum = calculator.add(a, b);
+		// check for condition, to verify the output produced is matching with pre-computed output or not to mark test as passed/failed
+		if(expectedSum == actualSum) {
+			System.out.println("passed");
+		}else {
+			System.out.println("failed");
+		}
+	}
+}
+
+------------------------------------------------------------------------------------------------------------------------
+#2 level 2 requirements of achieving automation testing
+
+within our application, there can be lot of classes and each class may have several methods within them, now we need implement unittesting for not one class, rather for all of the classes and every method that is there within our application
+
+for e.g.. we have Calculator class with 2 methods defined, how to implement automation testing for testing #2 methods?
+	
+package com.core.utils;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+	int substract(int a, int b) {
+		return b - a;
+	}
+}	
+
+
+package com.core.test;
+class CalculatorTest {
+	public static void main(String[] args) {
+		// code for testing add
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		Calculator calculator = new Calculator();
+		int actualSum = calculator.add(a, b);
+		if(expectedSum == actualSum) {
+			System.out.println("add: passed");
+		}else {
+			System.out.println("add: failed");
+		}
+		
+		a = 10;
+		b = 20;
+		int expectedSubstract = 10;
+		calculator = new Calculator();
+		int actualSubstract = calculator.substract(a, b);
+		if(expectedSubstract == actualSubstract) {
+			System.out.println("substract: passed");
+		}else {
+			System.out.println("substract: failed");
+		}		
+	}
+}
+
+There are lot of problems in the above testcode we have written
+1. by looking at the above code, we cannot identify quickly which part/block of code is testing what piece of actual code, so that the testcode becomes difficult to understand and maintain 
+2. with the above testcode we cannot test any of the original methods independent of another one, if we run the CalculatorTest class, it tests all of the methods of the Calculator class
+3. In the above automation code implementation, the failure of add, will effect the test execution of substract. for eg.. while testing add, if it ran into an un-checked exception, then the program will be terminated without proceeding for testing the substract method which is wrong
+
+Let us modify the testcode as per the above findings
+
+
+package com.core.test;
+public class CalculatorTest {
+	void testAddWithPositiveNumbers() {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		Calculator calcuator = new Calculator();
+		int actualSum = calculator.add(a, b);
+		if(expectedSum == actualSum) {
+			System.out.println("add: passed");
+		}else {
+			System.out.println("add: failed");
+		}
+	}
+	
+	void testSubstractWithPositiveNumbers() {
+		a = 10;
+		b = 20;
+		int expectedSubstract = 10;
+		calculator = new Calculator();
+		int actualSubstract = calculator.substract(a, b);
+		if(expectedSubstract == actualSubstract) {
+			System.out.println("substract: passed");
+		}else {
+			System.out.println("substract: failed");
+		}		
+	}
+	
+	public static void main(String[] args) {
+		CalculatorTest calculatorTest = new CalculatorTest();
+		try {
+			calculatorTest.testAddWithPostiveNumbers();	
+		}catch(Throwable t) {
+			// dont do anything
+		}
+		try {
+			calculatorTest.testSubstractWithPositiveNumbers();	
+		}catch(Throwable t) {
+			
+		}
+		
+	}
+}
+	
+Refactor:
+1. For each method of the original class to be tested write one testcase method, it is good to follow naming convention in writing the methodName to identify this method is testing which method of original class. abbrevate or elaborate the name of the test method to indicate the type or testcase you are examining or verifying
+
+2. The test method should not take any parameters, as the input data we wanted to use for conducting the testing is pre-fixed or predefined. The return value of the test method always should be void, since it is not going to return any output of calculation that acts as an input to some other method
+
+3. The test methods are accessed by the testcase code only, so they should not be written with public access modifier
+-----------------------------------------------------------------------------------------------------------------------
+#level 3
+In an application there can be lot of classes, we need to write the testcode for testing all of the classes in our application, so how to handle implementing the test logic let us examine
+
+package com.core.utils;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+	int substract(int a, int b) {
+		return b - a;
+	}
+}
+
+class Number {
+	public boolean isEven(int n) {
+		if(n %2 == 0) {
+			return true;
+		}
+		return false;
+	}
+}
+
+package com.core.test;
+public class CalculatorTest {
+	void testAddWithPositiveNumbers() {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		Calculator calcuator = new Calculator();
+		int actualSum = calculator.add(a, b);
+		if(expectedSum == actualSum) {
+			System.out.println("add: passed");
+		}else {
+			System.out.println("add: failed");
+		}
+	}
+	
+	void testSubstractWithPositiveNumbers() {
+		a = 10;
+		b = 20;
+		int expectedSubstract = 10;
+		calculator = new Calculator();
+		int actualSubstract = calculator.substract(a, b);
+		if(expectedSubstract == actualSubstract) {
+			System.out.println("substract: passed");
+		}else {
+			System.out.println("substract: failed");
+		}		
+	}
+	
+	public static void main(String[] args) {
+		CalculatorTest calculatorTest = new CalculatorTest();
+		try {
+			calculatorTest.testAddWithPostiveNumbers();	
+		}catch(Throwable t) {
+			// dont do anything
+		}
+		try {
+			calculatorTest.testSubstractWithPositiveNumbers();	
+		}catch(Throwable t) {
+			
+		}
+		
+	}
+}
+	
+
+class NumberTest {
+	public void testEven() {
+		int n = 7;
+		boolean expectedEven = false;
+		Number number = new Number();
+		boolean actualEven = number.isEven(n);
+		if(expectedEven == actualEven) {
+			System.out.println("isEven: passed");
+		}else {
+			System.out.println("isEven: failed");
+		}
+	}
+	public static void main(String[] args) {
+		NumberTest numberTest = new NumberTest();
+		try {
+			numberTest.testEven();
+		}catch(Throwable t) {}
+	}
+}
+In the above way of implementing the testcase code in testing the original classes of our application has lot of problems
+1. There is no way we can test all of the code of our application at oneshot, we need to run individually the testclass of each original class to verify which takes lot of time for certifying the whole application
+
+2. There is no way to derive the metrics of identifying how many tests being conducted, how many passed, how many resulted in failure / error we cannot identify to see the health of the application
+
+Let us try to solve the above problems
+
+
+package com.core.utils;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+	int substract(int a, int b) {
+		return b - a;
+	}
+}
+
+package com.core.utils;
+class Number {
+	public boolean isEven(int n) {
+		if(n %2 == 0) {
+			return true;
+		}
+		return false;
+	}
+}
+
+package com.core.test;
+public class CalculatorTest {
+	void testAddWithPositiveNumbers() {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		Calculator calcuator = new Calculator();
+		int actualSum = calculator.add(a, b);
+		Assertion.assertEquals(expectedSum, actualSum);
+	}
+	
+	void testSubstractWithPositiveNumbers() {
+		a = 10;
+		b = 20;
+		int expectedSubstract = 10;
+		calculator = new Calculator();
+		int actualSubstract = calculator.substract(a, b);
+		Assertion.assertEquals(expectedSubstract, actualSubstract)''	
+	}
+}
+	
+class NumberTest {
+	public void testEven() {
+		int n = 7;
+		boolean expectedEven = false;
+		Number number = new Number();
+		boolean actualEven = number.isEven(n);
+		Assertion.assertFalse(actualEven);
+	}
+}
+
+
+class TestRunner {
+	public static void main(String args) {
+		CalculatorTest calculatorTest = new CalculatorTest();
+		int totalTests = 0;
+		int totalSuccess = 0;
+		int totalFailure = 0;
+		int totalError = 0;
+				
+		try {
+			totalTests++;
+			calculatorTest.testAddWithPositiveNumbers();
+			System.out.println(".");
+			totalSuccess++;
+		}catch(Throwable t) {
+			System.out.println("E");
+			t.printStackTrace();
+			totalError++;
+		}catch(AssertionFailureException e) {
+			System.out.println("F");
+			e.printStackTrace();
+			totalFailure++;
+		}
+		
+		try {
+			totalTests++;
+			calculatorTest.testSubstractWithPositiveNumbers();
+			totalSuccess++;
+		}catch(Throwable t) {
+			totalError++;
+		}catch(AssertionFailureException e) {
+			totalFailure++;
+		}
+		
+		NumberTest numberTest = new NumberTest();
+		try {
+			totalTests++;
+			numberTest.testEven();
+			totalSuccess++;
+		}catch(Throwable t) {
+			totalError++;
+		}catch(AssertionFailureException e) {
+			totalFailure++;
+		}
+		System.out.println("total runs: "+ totalTests + " ,passed: "+ totalSuccess + " failed: " +totalFailure + " error: " + totalError);		
+	}
+}
+
+class AssertionFailureException extends RuntimeException {
+	public AssertionFailureException(String cause) {
+		super(cause);
+	}
+}
+
+class Assertion {
+	public static void assertEquals(int expected, int actual) {
+		if(expected != actual) {
+			throw new AssertionFailureException("expected :" + expected + " and actual :"+  actual + " are not matching");
+		}
+	}
+	public static void assertEquals(double expected, double actual) {
+		if(expected != actual) {
+			throw new AssertionFailureException("expected :" + expected + " and actual :"+  actual + " are not matching");
+		}
+	}
+	public static void assertEquals(float expected, float actual) {
+		if(expected != actual) {
+			throw new AssertionFailureException("expected :" + expected + " and actual :"+  actual + " are not matching");
+		}
+	}
+	public static void assertTrue(boolean actual) {
+		if(true != actual) {
+			throw new AssertionFailureException("expected : true"+ " and actual :"+  actual + " are not matching");
+		}
+	}
+	
+}
+In the above code it looks like most of the problems we have observed earlier are fixed, but in TestRunner class we endup in duplicating the logic for executing each test method of all the testcase classes
+
+
+class TestRunner {
+	public static void main(String[] args) {
+		int totalTests = 0;
+		int totalSuccess = 0;
+		int totalFailure = 0;
+		int totalError = 0;
+		
+		for(String fqnClass : args) {
+			Class<?> testClazz = Class.forName(fqnClass);
+			Object testClazzObject = testClazz.newInstance();
+			Method[] methods = testClazz.getDeclaredMethods();
+			for(Method testMethod : methods) {
+				if(testMethod.getName().startsWith("test")) {
+					try {
+						totalTests++;
+						testMethod.invoke(new Object[]{}, testClazzObject);
+						totalSuccess++;
+					}catch(Throwable t) {
+						totalError++;
+					}catch(AssertionFailureException e) {
+						totalFailure++;
+					}
+				}
+			}
+		}
+		System.out.println("total runs: "+ totalTests + " ,passed: "+ totalSuccess + " failed: " +totalFailure + " error: " + totalError);		
+	}
+}
+
+java TestRunner CalculatorTest NumberTest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

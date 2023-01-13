@@ -1,0 +1,105 @@
+JUnit4
+JUnit4 has added lot of new features in writing the unit testcases
+1. replaced interface-driven programming model with annotation-based programming, so JUnit4 encourages pojofied development
+2. There is no mandatory rule that our testcase method should start with name testXXX, to identify which of the methods within the TestCase class are test methods, JUnit4 has introduced an annotation @Test
+3. Test execution lifecycle
+The Test execution lifecycle incase of JUnit3 is setup() -> testCaseMethod() -> tearDown(), which has been changed in JUnit4
+4. Parameterized TestCases are introduced in JUnit4 to avoid code redundancy
+5. static imports are supported for Assert classes in JUnit4
+6. Timeout testing and Exception testing has been added in JUnit4
+7. JUnit4 has introduced new TestRunners to support executing JUnit3 testcases and JUnit4 testcases as well, for backward compatibility
+
+package com.ju4ml.core;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+}
+
+package com.ju4ml.core;
+import static org.junit.Assert.*;
+
+class CalculatorTest {
+	Calculator calculator;
+	
+	@Before
+	public void initialize() {
+		calculator = new Calculator();
+	}
+	
+	@Test
+	void testAddWithPositiveNumbers() {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@After
+	public void close() {
+		calculator = null;
+	}
+}
+
+The JUnit4 has added new TestRunners "JUnit4ClassRunner" to support executing test methods of TestCase classes based on new programming model, but if the application has already existing testcases written with JUnit3 api,those cannot be executed with JUnit4 TestRunners.
+	
+So JUnit4 has additionally provided one more class called JUnitCore which acts as a facade in identifying the TestCase class we passed is written using which api and executes it accordingly by using appropriate testrunners
+	
+set CP=c:\Users\Sriman\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;c:\Users\Sriman\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;target\classes
+
+javac -cp %CP% -d target\classes src\main\java\com\ju4ml\core\Number.java
+javac -cp %CP% -d target\classes src\main\java\com\ju4ml\core\Calculator.java
+
+javac -cp %CP% -d target\classes src\test\java\com\ju4ml\core\NumberTest.java
+javac -cp %CP% -d target\classes src\test\java\com\ju4ml\core\CalculatorTest.java
+
+java -cp %CP% org.junit.runner.JUnitCore com.ju4ml.core.CalculatorTest com.ju4ml.core.NumberTest
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,184 @@
+Parameterized Test
+------------------
+package com.ju4pt.core;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+	
+	int multiply(int a, int b) {
+		return a * b;
+	}
+}
+
+
+package com.ju4pt.core;
+class CalculatorTest {
+	Calculator calculator;
+	
+	@Before
+	public void setup() {
+		calculator = new Calculator();
+	}
+	
+	@Test
+	public void testAddWithPositiveNumbers(int a, int b, int expectedSum) {
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@Test
+	public void testAddWithNegativeNumbers() {
+		int a = -10;
+		int b = -30;
+		int expectedSum = -40;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@Test
+	public void testAddWithPositiveNegativeNumbers() {
+		int a = 30;
+		int b = -10;
+		int expectedSum = 20;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@Test
+	public void testAddWithZero() {
+		int a = 0;
+		int b = 0;
+		int expectedSum = 0;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+		
+	
+	@After
+	public void tearDown() {
+		calculator = null;
+	}
+}
+
+We can only certify the code, it is working properly only upon testing the code with all the possible inputs, so to certify a method within our original code, we need to write multiple test methods within the TestCase class to test the original functionality
+	
+In the above CaculatorTest class we wrote multiple methods for testing the add() method of Calculator class, if we look at the code, for testing various possible combination of inputs we wrote multiple methods where the code across the methods are being duplicated due to which
+1. it takes more time for writing the testcases for testing the functionality
+2. maintainance issues will creep up
+
+instead of that if we can write the test methods to be executed by passing the inputs, then we can avoid duplication of code. To help us in quickly testing the code with possible combinations JUnit4 has introduced Parameterized Testing
+
+1. JUnit4 has introduced an new TestRunner called Parameterized, instead of using JUnit4ClassRunner we need to use Parameterized runner
+2. Per each method in the original class to conduct the testing we need to write one Parameterized TestCase class
+3. The TestCase class should be annotated with @RunWith to tell the JUnit engine which TestRunner should be used for running the Testcase class
+4. we need to write a static parameters method that supplies the List of array of values that should be taken as input in executing the tests and annotate the method with @Parameters indicating the testrunner to invoke it for collecting the parameters.
+
+	
+{
+	[10, 20, 30],
+	[-10, 20, 10],
+	[-10, -20, -30]
+}
+	
+@RunWith(Parameterized.class)	
+class CalculatorAddTest {
+	Calculator calculator;
+	int a;
+	int b;
+	int expectedSum;
+	
+	public CalculatorAddTest(int a, int b, int expectedSum) {
+		this.a = a;
+		this.b = b;
+		this.expectedSum = expectedSum;
+	}
+	
+	@Parameters
+	public static List<Object[]> getParameters() {
+		return Arrays.asList(new Object[][]{{10, 20, 30},{-10, 20, 10},{-10, -20, -30},{0,0,0}});
+	}
+	
+	@Before
+	public void setup() {
+		calculator = new Calculator;
+	}
+	
+	@Test
+	public void testAdd() {
+		int actualSum = calcuator.add(a,b);
+		assertEquals(expectedSum, actualSum);
+	}
+
+	
+	@After
+	public void tearDown() {
+		calculator = null;
+	}
+}	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

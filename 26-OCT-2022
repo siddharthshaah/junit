@@ -1,0 +1,73 @@
+JUnit
+JUnit is an unit test automation tool, that helps us in quickly writing the unit testcases for testing and certifying the code.
+	
+What is unit testing, why do we need to perform unit testing?
+The developer while developing the code, he has to verify whether the source code he has written is working properly or not, upon certifying the code he has written is working properly he needs to deliver the code to the quality assurance engineers. The process of verifying the code by the developer, before delivering the code to the qa is called "unit testing".
+	
+aspart of the unit testing, the developer has to test each component independently to certify the code written aspart of the component is working properly. unit testing ensures the qa can further test the application without having road-blockers or show stoppers in testing the application
+
+Why do we need to automate the unit testing process?
+Unit testing is an repeatitive process that should be conducted by the developer during the development and delivery phase of the application. The developer has to perform unit testing manually for each feature or a bug fix he has made within the application, along with testing the feature or bug fix he has to test the dependent features or code modules that might have been effected because of the changes he has made during the development. So, the amount of time it takes for the developer in cerifying the code changes he has made is going to be very high which delays the delivery of the application and increases the cost of development as well. Since it is an repeatitive process, instead of performing it manually, we need to implement automation.
+	
+When do we need to perform unit testing?
+The developer has to write the unit testcode code in parallel to the development of the actual source code of the application, it is called "test-driven development". The developer while working on the sourcecode, once he has got to a state where he can test the component or the piece of code he has written, immediately the developer has write the unit testcases to cerify the code and proceed for further development, this process is "code a little, test a little" approach of developing the code.
+	
+How to conduct the unit testing for an application code?
+Unit testing is the process of verifying the code written is working as per the requirement and is it producing the actual results or not. To verify the code is working properly or not, we need to perform the below activities.
+	1. we have to take pre-defined or know inputs which is called "test fixture".
+	2. then apply these inputs and manually evaluate the code and compute the outcome of code with these inputs
+	3. then execute the actual code block or component with these predefined inputs
+	4. capture the output and verify whether the code has produced the expected or pre-computed output which we have calculated manually, if thoese are matching then test has been marked as passed other failed
+	
+So testing is the process of verifying the code with pre-defined set of inputs and verifying the output produced is matching with original computed output to certify it is working or not is called "testing process".
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	

@@ -1,0 +1,131 @@
+Mockito
+-------
+while performing the unit testing, we need to conduct it in a manner by isolating each component from other. The goal of unit testing is to identify the rootcause of the failure quickly if any. 
+	
+When we have 2 classes which are having inter-dependency with each other, while conducting the unit testing of one class, if there is an logical error in the dependent class, the tests we applied on our class also will be failed due to which we cannot identify the rootcause of the failure.
+	
+To test and certify our class, the dependent class should be isolated, this can be done by creating mock class on dependent class.
+	
+The Mock classes should not have any logic rather should have an dummy implementation of the original class where the methods of those class just returns a pre-defined set of values as outcome upon calling them, so that we can test our class by holding the references of Mock classes within our class.
+if there is a failure in the tests being conducted, we can guarantee the tests got failed because of the logical error within our class only.
+	
+We can certify the code within our class is working only when we have tested our class with all the possible combination of inputs/outputs, inorder to achieve that we need to create several mock classes on dependent to return various different sampling outputs for a combinational inputs. The amount of code and efforts we need to invest in creating the mock classes is very high to quickly produce the mock classes there are mocking frameworks introduced in the market like
+1. Mockito
+2. JMock
+3. EasyMock
+4. Powermock
+etc
+------------------------------------------------------------------------------------------------------------------------
+What is mockito, why do we use it?
+Mockito is an opensource framework for mocking classes, so that we can take dependencies of a class as mock objects and can conduct the unit testing at component level. It greatly reduces the efforts of developing the mock objects to perform unit testing
+
+How to use Mockito?
+There are 3 stages in which a mock has to created and used
+1. create an Mock object on the dependent class you wanted to be isolated from
+2. conduct the testing of our class, by using against the dependent mock object we created
+3. validate the code and verify the mock objects are called as expected or not
+
+                           #1                  #2                             #3
+                         create a        use the mock object           validate and verify mock
+                        mock object      to perform testing         is being used as expected or not
+
+In the older version of mockito we need to write the code for initializing the mockito and create mocks by calling Mockito.mock(class);
+
+
+@RunWith(MockitoJUnitRunner.class)
+class BidAnalyzerTest {
+	
+	@Before
+	public void before() {
+		MockitoAnnotations.initMocks(this);	
+	}
+	
+	@Test
+	public void testGetTopBids() {
+		BidSorter bidSorter = Mockito.mock(BidSorter.class);
+		Mockito.when(bidSorter.sortBids(new double[]{99.1, 100.3, 98.3}, 3)).thenReturn(new double[]{100.3});
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

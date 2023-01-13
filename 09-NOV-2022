@@ -1,0 +1,114 @@
+Nested Test
+We can categorize or group test methods into nested classes based on the type of functionality, so that we can easily identify which group of tests are failing and at what percentage there are failing
+
+class UserAccountService {
+  void register(UserAccount account) {}
+}
+
+class UserAccountServiceTest {
+	@Nested
+	class NewUserRegistrationTest {
+		@Test
+		public void testRegisterUser() {}
+		@Test
+		public void testRegisterUserWithInvalidEmailAddress() {}
+		@Test
+		public void testRegisterUserWithInvalidMobileNo() {}
+		@Test
+		public void testRegisterUserWithUnqualifiedAgeLimit() {}
+	}
+	@Nested
+	public class ExistingUserRegistrationTest {
+		@Test
+		public void testRegisterUserWithExistingUserEmailAddress() {}
+		@Test
+		public void testRegisterUserWithExistingMobileNo() {}
+		@Test
+		public void testRegisterUserWithDisabledUser() {}		
+	}	
+}
+------------------------------------------------------------------------------------------------------------------------
+Tag
+We can mark every test method using @Tag annotation categorizing the type of testing we are performing like "functional", "performance", "stress" or "security" etc. so that when we are executing the tests we can pick the tests of specific category or tag and execute them quickly
+
+
+class CalculatorTest {
+	@Test
+	@Tag("performance")
+	public void testAddWithPositive() {
+	
+	}
+	
+	@Test
+	@Tag("stress")
+	public void testAddWithNegative() {}
+}
+------------------------------------------------------------------------------------------------------------------------
+Parameterized Test
+-------------------
+JUnit4 supports parameterized testing, but it has a drawback for each method we wanted to test in the target/original class we need to write one TestCase class to test with all the possibilities. In this way we endup in writing lot of TestCase classes for each method of the Target class
+	
+Instead the JUnit5 has introduced better way of writing the parameterized tests. 
+	
+#JUnit4	
+@RunWith(Parameterized.class)	
+class CalculatorAddTest {
+	int a;
+	int b;
+	int expectedSum;
+	
+	public CalculatorTest(int a, int b, int expectedSum) {
+		this.a=a;
+		this.b=b;
+		this.expectedSum = expectedSum;
+	}
+	
+	@Parameters
+	public static List<Object[]> getParameters() {}
+	
+	@Test
+	public void testAdd() {
+		
+	}
+}	
+
+#JUnit5
+The JUnit5 has introduced better way of writing the parameterized tests, instead of binding the parameters to the class level, we can pass parameters with which we want to conduct test at method level directly
+
+class CalculatorTest {
+
+	@ParameterizedTest
+	@CsvSource(value={"10","20", "30", "10","-10","0"})
+	public void testAdd(int a, int b, int expectedSum) {
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+}
+
+There are many ways we can pass the parameters as input to the test method like
+@CsvSource
+@MethodSource
+@EnumSource
+etc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,170 @@
+What is Mockito, why do we use it?
+Mockito is an opensource framework for mocking the objects, so that we can perform unittesting by injecting or taking the dependents as mock and isolate from each other.
+advantages:-
+1. no need to write mock classes manually in our application to perform component level unit testing	
+2. even we change the parameters or methodNames of the original interfaces, there is no impact on the mocks, since the mocks are created at runtime
+3. using mockito we can mock for returnValue and exceptions also
+4. verify and order check supported 
+
+The latest version of mockito has added support for close integration with JUnit5 Jupiter and plenty of new features are added like
+1. mock private methods
+2. mock final classes
+3. mock static methods
+4. support of annotations
+
+JUnit5 + Mockito
+we need to add the below maven dependencies into our project to use Mockito
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <version>4.8.1</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>4.8.1</version>
+    <scope>test</scope>
+</dependency>
+
+
+class Finder {
+	public boolean isEven(int n) {
+		return ((n%2) == 0);
+	}
+}
+
+class ArrayHelper {
+	private Finder finder;
+	
+	public ArrayHelper(Finder finder) {
+		this.finder = finder;
+	}
+	
+	public long sumOfEvens(int[] nArray) {
+		long sum = 0;
+		for(int i=0;i<nArray.length;i++) {
+			if(finder.isEven(nArray[i])) {
+				sum+=nArray[i];
+			}
+		}
+		return sum;
+	}
+	
+}
+
+@ExtendWith(MockitoExtension.class)
+class ArrayHelperTest {
+	@Mock
+	Finder finder;
+	
+	@InjectMocks
+	ArrayHelper arrayHelper;
+	
+	@Test
+	public void testSumOfEvens() {
+		int[] nArray = new int[] {10, 11,7, 9, 8, 4};
+		int expectedSum = 22;
+		when(finder.isEven(10)).thenReturn(true);
+		when(finder.isEven(11)).thenReturn(false);
+		when(finder.isEven(7)).thenReturn(false);
+		when(finder.isEven(9)).thenReturn(false);
+		when(finder.isEven(8)).thenReturn(true);
+		when(finder.isEven(4)).thenReturn(true);
+		
+		int actualSum = arrayHelper.sumOfEvens(nArray);
+		assertEquals(expectedSum, actualSum);		
+	}
+}
+
+@Mock = creates an mock object on the given class attribute
+@InjectMocks
+takes care of instantiating the object of the given class and injects the mocked dependencies using one of three approaches
+	1. constructor based injection
+	2. setter 
+	3. Field
+	
+	
+if we have mocked multiple when conditions on the mock object, but in immediate test execution if the stubbed are not being called, the mockito throws an Unnecessary Stubbing exception
+
+To resolve this problem there are 3 options available
+1. identify the unnecessary stubbing we have done through when() call and cleanup the code
+2. we can linient() to the when() to make the stubbed method call optional
+linient().when(finder.isEven(6)).thenReturn(true);
+3.
+Instead of individual stubbed methods to be marked as linient we can apply globally using @MockitoSettings at the class level
+@MockitoSettings(strictness = Strictness.LENIENT)
+@ExtendWith(MockitoExtension.class)
+class ArrayHelperTest {
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

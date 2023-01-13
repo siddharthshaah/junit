@@ -1,0 +1,89 @@
+Test Execution Lifecycle
+The Test Execution Lifecycle has been changed in JUnit4 when compared with JUnit3, there are 2 more additional lifecycle methods are added.
+1. @BeforeClass
+2. @AfterClass
+	
+@Before & @After are equal to setup() & tearDown() of JUnit3, these methods will be called before/after each test method execution execution. But if we wanted to perform one-time initialization/destruction logic before begining the execution of any of the test methods within a testcase class or after all the test methods completed execution there is no way we can achieve this in JUnit3
+
+JUnit4 has introduced @BeforeClass & @AfterClass using these annotated methods we can perform one-time initialization and destruction logic for a testcase class. 
+	
+These methods would be executed before instantiating the Testcase class , so these methods should be static.
+------------------------------------------------------------------------------------------------------------------------
+Timeout Testing
+
+class Calculator {
+	int add(int a, int b) {
+		Thread.sleep(1000);
+		return a + b;
+	}
+}
+
+class CalculatorTest {
+	Calculator calculator;
+	
+	@Before
+	public void init() {
+		calculator = new Calculator();
+	}
+	
+	/**
+	This code we need to write incase of JUnit3
+	**/
+	public void testAddWithPostive() {
+		int a = 10;
+		int b = 20;
+		int expectedSum=30;
+		long st = System.getCurrentTimeInMilliSeconds();
+		int actualSum = calculator.add(a, b);
+		long et = System.getCurrentTimeInMilliSeconds();
+		long tt = et - st;
+		assertEquals(tt, 200, "time limit exceeded more than 200");
+		assertEquals(expectedSum, actualSum);		
+	}
+	
+	/**
+	JUnit4 supports timeout testing
+	*/
+	@Test(timeout=200)
+	public void testAddWithPositiveTimeout() {
+		int a = 10;
+		int b = 20;
+		int expectedSum=30;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);		
+	}
+	
+	@After
+	public void clean() {
+		calculator = null;
+	}
+}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

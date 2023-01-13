@@ -1,0 +1,91 @@
+#3. verify mock
+upon stubbing the mock with expected method invocations and their outcomes, after conducting the testing using the stub we can verify whether the stubbed methods are invoked on the mock or not using verify api
+
+verify(mockObject).methodName(arguments);
+verify(mockObject, VerificationMode).methodName(arguments);
+
+#4. Mockito Stubbing Concrete class
+@Spy
+Through the Spy we can mock the original objects or the concrete class itself, so that the unstubbed methods on the mock will delegates the execution onto the original class itself rather than failing and running into exception.
+all the operations on the unstubbed methods are performed with the original state of the object
+The stubbed methods will not impact the original state of the object
+
+class LineItem {
+	String productCode;
+	int quantity;
+	double unitPrice;
+	// accessors
+}
+class ShippingAddress {
+	String addressLine1;
+	String city;
+	String state;
+	int zip;
+	String country;
+	// accessors
+}
+
+class Cart {
+	List<LineItem> lineItems;
+	ShippingAddress shippingAddress;
+	
+	public boolean addItem(String productCode, int quantity, double unitPrice) {}
+	public boolean updateItem(String productCode, int quantity) {}
+	public boolean emptyCart() {}
+	public int setShippingAddress(ShippingAddress shippingAddress) {}
+}
+
+class OrderManager {
+	public String checkout(Map<String, Integer> products, ShippingAddress shippingAddress) {
+	
+	}
+}
+
+class OrderManagerTest {
+	@Spy
+	Cart cart;
+	@InjectMocks
+	OrderManager orderManager;
+	
+	@Test
+	public void testCheckout() {
+		Map<String, Integer> products = new HashMap();
+		ShippingAddress shippingAddress = new ShippingAddress();
+		
+		products.put("p1", 1);
+		products.put("p2", 2);
+		when(cart.addItem("p1", 1, 10)).thenReturn(true);
+		when(cart.addItem("p1", 2, 10)).thenReturn(true);
+		
+		String orderNo = orderManager.checkout(products,shippingAddress);
+		assertNotNull(orderNo);
+		assertNotEmpty(orderNo);
+	}
+	
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

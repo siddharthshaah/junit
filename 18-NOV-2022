@@ -1,0 +1,119 @@
+1. when().thenReturn() (stubbing)
+2. mocking exception
+3. argument matchers
+4. verify
+5. spy
+
+How to stub the void methods using mockito?
+
+class Cart {
+	List<LineItem> lineItems;
+	ShippingAddress shippingAddress;
+	
+	public void addLineItem(String productCode, int quantity, double price) {
+		if(lineItems == null) {
+			lineItems = new ArrayList<>();
+		}
+		LineItem lineItem = new LineItem();
+		// populate the data
+		lineItems.add(lineItem);
+	}
+	public List<LineItem> getLineItems() {
+		if(lineItems == null) {
+			lineItems = new ArrayList<>();
+		}
+		return lineItems;
+	}
+}
+
+class OrderManagerTest {
+	@Mock
+	Cart cart;
+	@InjectMocks
+	OrderManager orderManager;
+	
+	@Test
+	void testCheckout() {
+		Map<String, Integer> products = new HashMap();
+		products.put("p1", 1);
+		doNothing().when(cart.addLineItem("p1", 1, 100));
+		orderManager.checkout(products, shippingAddress);
+		verify(cart, atleastOnce()).addLineItem(eq("p1"), eq(1), anyDouble());
+		
+	}
+	
+}
+doNothing() is used for mocking the void methods, and we can verify the void method on the stub has been executed or not using verify()
+	
+#6. How to mock static methods?
+class ArrayHelper {
+	public static int[] sort(int[] inArray) {
+		// sorting logic
+		return sortedArray;
+	}
+}
+
+class FindBig {
+	
+	public int getBigNumber(int[] inArray) {
+		int[] sortedArray = ArrayHelper.sort(inArray);
+		return sortedArray[sortedArray.length-1];
+	}
+}
+
+@ExtendWith(MockitoExtension.class)
+class FindBigTest {
+	FindBig findBig;
+	
+	@BeforeEach
+	public void init() {
+		findBig = new FindBig();
+	}
+	
+	void testGetBigNumber() {
+		int[] inArray = new int[]{10, 12, 7, 11};
+		int expectedBigNumber = 12;
+		
+		try(MockedStatic<ArrayHelper> arrayHelper = Mockito.mockStatic(ArrayHelper.class)) {
+			arrayHelper.when(()-> ArrayHelper.sort(inArray)).thenReturn(new int[]{7, 10, 11, 12});
+			int actualBigNumber = findBig.getBigNumber(inArray);
+			assertEquals(expectedBigNumber, actualBigNumber);
+		}
+	}
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+

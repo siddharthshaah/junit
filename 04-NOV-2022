@@ -1,0 +1,144 @@
+TestSuite
+----------
+TestSuites are the way through which we bundle bunch of TestCase classes we wanted to execute together to certify a feature or a module within the application
+
+each time rather than we manually passing the fqn TestCase classes as input in testing the module or a feature we can group them or list them in a TestSuite and pass it as an input to the TestRunner asking to execute and produce the TestResult.
+	
+@RunWith(Suite.class)	
+@SuiteClasses({SignUpService.class, UserDetailsService.class, RewardPointsService.class})	
+class SignUpFeatureSuite {
+	
+}	
+
+@RunWith(Suite.class)
+@SuiteClasses({AccountService.class})
+class ForgotPasswordFeatureSuite {
+	
+}
+
+@RunWith(Suite.class)
+@SuiteClasses({RestPasswordService.class, AccountManager.class})
+class ResetPasswordFeatureSuite {}
+
+
+@RunWith(Suite.class)
+@SuiteClasses({SignUpFeatureSuite.class, ForgotPasswordFeatureSuite.class, ResetPasswordFeatureSuite.class})
+class AccountManagementModuleSuite {
+	
+}
+
+By using the help of TestSuites it will be easy to plan and conduct testing for the application
+-----------------------------------------------------------------------------------------------------------------------
+JUnit5
+The JUnit5 is composed of several different modules from three different sub-projects
+1. JUnit Platform
+2. JUnit Jupiter
+3. JUnit Vintage
+
+JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage
+
+1. JUnit Platform
+JUnit Platform acts as an foundation for launching testing frameworks on the JVM, it provides TestEngine API for developing a testing framework that runs on the platform. It has provided extensibility api, that can be used in integrating JUnit as part of IDE (eclipse, intelliJ or visual studio code editor) or build tools like (maven, gradle) etc.
+
+2. JUnit Jupiter
+It is the new programming module provided aspart of JUnit5, which has shipped new annotations, TestLifecycles and features in building Testcases/Testsuites
+
+3. JUnit Vintage
+To retain backward compatibility in executing JUnit3/JUnit4 Testcases, the JUnit5 has shipped another module called JUnit Vintage, which should be added to the classpath of our project only when we have the older testcases classes in project
+
+
+
+How to write the Testcases in JUnit5?
+
+package com.ju5.core;
+class Calculator {
+	int add(int a, int b) {
+		return a + b;
+	}
+}
+
+
+class CalculatorTest {
+	Calculator calculator;
+	
+	@BeforeEach
+	public void setup() {
+		calculator = new Calculator();
+	}
+	
+	@Test
+	public void testAddWithPositiveNumbers() {
+		int a = 10;
+		int b = 20;
+		int expectedSum = 30;
+		int actualSum = calculator.add(a, b);
+		assertEquals(expectedSum, actualSum);
+	}
+	
+	@AfterEach
+	public void tearDown() {
+		calculator = null;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

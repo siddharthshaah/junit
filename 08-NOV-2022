@@ -1,0 +1,166 @@
+#5. Repeated Test
+JUnit Jupiter supports executing a test method repeatedly for specified number of times. each repeatition behaves like a regular @Test method execution with full support of the same Test lifecycle.
+	
+A TestRunner executes an @Test method	only once but sometimes we wanted to conduct a test repetitively for several times to see the behaviour which can be accomplished using Repeated Test in Junit5
+
+@RepeatedTest(10)
+void testMethod() {
+
+}
+
+we can customize the displayName and can extract the RepeatitionInfo of the method by using expressions and few more classes
+
+
+class CalculatorTest {
+
+	@BeforeEach
+	public void before(TestInfo testInfo, RepetitionInfo repititionInfo) {
+		testInfo.getTestMethod().get().getName();
+		
+	}
+
+	@RepeatedTest(10)
+	public void testAddWithPositiveNumbers(RepetitionInfo repetitionInfo) {
+		sop(repetitionInfo.getCurrentRepetition());
+		sop(repetitionInfo.getTotalRepetitions());
+	}
+
+	@RepeatedTest(10)
+	public void testAddWithNegativeNumbers() {
+	
+	}
+	
+	@RepeatedTest(value=10, name="{displayName} {currentRepetition}/{totalRepetitions}")
+	@DisplayName("test with zero")
+	public void testAddWithZero() {
+	
+	}
+}
+-----------------------------------------------------------------------------------------------------------------------
+#6 Conditional Test Execution
+
+1. @Disabled
+sometimes we want to skip few methods being executed aspart of the testcase class, one way to achieve that is by commenting the method or @Test annotation, but the problem with this is these methods will vanish from the Testcase class as if those were never exists within our code
+
+instead we can mark those methods which we wanted to temporarily pause executing by using @Disabled, so that during the execution of the Test class JUnit display as part of test result how many methods disabled for execution as well.
+	
+class Test {
+	@Test
+	public void test1() {}
+	@Test
+	@Disabled("reason for disabling")
+	public void test2() {}
+}	
+
+2. Conditional Tests
+Many of the times all the tests being conducted may not be applicable across all the environments, few tests need to be conducted for few env, and others on different
+for eg.. 
+1. we want to apply tests based on platform or operating system
+2. based on jdk
+3. based on system properties
+these can be achieved using conditional tests in JUnit5
+
+operating system
+----------------
+@EnabledOnOs(MAC)
+- MAC
+- WINDOWS
+- LINUX
+
+@EnableOnOs(architectures = "x86_64")
+
+java environment
+----------------
+@EnableOnJre(JAVA_8)
+@EnableForJreRange(min= JAVA_8, max=JAVA_11)
+
+system property
+---------------
+@EnableIfSystemProperty(named="os.name", matches="")
+
+environment variable conditions
+--------------------------------
+@EnableIfEnvironmentVariable(named="", matches="")
+
+custom conditions
+------------------
+@Test
+@EnableIf("com.ju5.condition.ExternalCondition.checkCondition")
+public void test() {
+
+}
+
+package com.ju5.condition;
+class ExternalCondition {
+	static boolean checkCondition() {
+		return true;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

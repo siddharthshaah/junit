@@ -1,0 +1,144 @@
+What are the typical requirements of implementing an automated unittesting for an application?
+1. each test that we perform should produce the end outcome as pass/fail
+2. there should be a way to initialize and destroy the common test fixtures/resources that we use across the test methods in a testcase class before/after the test method execution
+3. every test method should be executed isolated from another test method execution
+4. the test failure should be reported as an exception rather than an outcome
+5. need a proper reporting indicating how many tests being conducted, passed, failed and errored
+6. require an centralized test runner that takes care of automatically identifying the test methods and execute them and capture their test outcome and reports it
+
+To fulfill the above requirements in implementing unit testing for an application, Automation test frameworks like JUnit, TestNG etc has been introduced.
+	
+JUnit
+JUnit is an automation test framework that has provided convinient api classes allowing the developers to quickly write testcases, the JUnit engine takes care of executing the tests cases written by us and reports the statistics out of conducting the tests
+There are 3 version of JUnit is available in the market
+1. JUnit3
+2. JUnit4
+3. JUnit5.x
+
+JUnit3 
+JUnit3 is the initial releases of the JUnit Framework and currently not being used in the market.
+	
+d:\workspace:/>
+mathlab
+|-src
+  |-com
+	  |-core
+		  |-beans
+			  |-Calculator.java
+|-testsrc
+	|-com
+		|-core
+			|-beans
+				|-CalculatorTest.java
+|-bin
+	|-com
+		|-core
+			|-beans
+				|-Calculator.class
+|-testbin
+	|-com
+		|-core
+			|-beans
+				|-CalculatorTest.class
+
+few points:
+1. always separate the actual sourcecode of your application from test sourcecode by placing them into 2 different directories. upon compiling produce the .class files of them into separate directories, so that we can package and ship only the actual code of the application into production rather than testcode
+2. the testcase class should be written under the same package of the original class for whom we are writing testcase, so that it maximizes the accessibility of the original class so that we can improve testcoverage
+	
+package com.core.beans;
+public class Calculator {
+	public int add(int a, int b) {
+		return a + b;
+	}
+}
+
+setUp = is the method used for initializing the testfixture before executing each of the test methods in the testcase class
+tearDown = is the method used for destroying or releasing the testfixture we have created during setup after the end of execution of each test method of the testcase class
+we need to mandatorily write the test method with name starting with testXXX to let the TestRunner identify it as test method and execute
+
+package com.core.beans;
+public class CalculatorTest extends TestCase{
+	int a;
+	int b;
+	int expectedSum;
+	int na;
+	int nb;
+	int nExpectedSum;
+	Calculator calculator;
+	
+	public void setUp() {
+		a = 10;
+		b = 20;
+		expectedSum = 30;
+		na = -10;
+		nb = -30;
+		nExpectedSum = -40;
+		calculator = new Calculator();
+	}
+	
+	void testAddWithPositiveNumbers() {
+		int actualSum = calculator.add(a, b);
+		Assert.assertEquals(expectedSum, actualSum);
+	}
+	
+	void testAddWithNegativeNumbers() {
+		int actualSum = calculator.add(na, nb);
+		Assert.assertEquals(expectedSum,actualSum);
+	}
+	
+	public void tearDown() {
+		calculator = null;
+	}
+}
+
+Junit3 has provided a TestRunner class called junit.textui.TestRunner which is an console based runner that produces an textual output of executing the testcases. we need to pass the fully qualified names of the Testcase classes, so that it searches for all the test methods which starts with testXX and executes them along with test fixture methods which are setup() and tearDown()
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

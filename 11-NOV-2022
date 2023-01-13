@@ -1,0 +1,106 @@
+interface BidSorter {
+	double[] sortBids(double[] inBids);
+}
+
+class BidSorterImpl implements BidSorter {
+	double[] sortBids(double[] inBids) {
+		double[] topBidsInSortedOrder = null;
+		
+		topBidsInSortedOrder = new double[inBids.length];
+		
+		// copied the array for sorting
+		for(int i=0; i<inBids.length;i++) {
+			topBidsInSortedOrder[i] = inBids[i];
+		}
+		
+		for(i=0;i<topBidsInSortedOrder.length;i++) {
+			for(int j = i; j<topBidsInSortedOrder.length-1;j++) {
+				if(topBidsInSortedOrder[j] < topBidsInSortedOrder[j+1]) {
+					double temp = topBidsInSortedOrder[i];
+					topBidsInSortedOrder[i]=topBidsInSortedOrder[i+1];
+					topBidsInSortedOrder[i+1] = temp;
+				}
+			}
+		}
+		return topBidsInSortedOrder;
+	}
+}
+
+class BidAnalyzer {
+	BidSorter bidSorter;
+	
+	public BidAnalyzer(BidSorter bidSorter) {
+		this.bidSorter = bidSorter;
+	}
+	
+	public double[] getBidWinners(double[] bids, int n) {	
+		double[] sortedBids = bidSorter.sortBids(bids);
+		double bidWinners = new double[n];
+		
+		for(int i=0;i<n;i++) {
+			bidWinners[i] = sortedBids[i];
+		}
+		return bidWinners;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------
+#Testing
+class MockBidSorterWithEmptyArray implements BidSorter {
+	double[] sortBids(double[] inBids) {
+		return new double[inBids.length];
+	}
+}	
+// 23.1, 54, 33.4, 23, 19
+class MockBidSorterWith5Bids implements BidSorter {
+	double[] sortBids(double[] inBids) {
+		return new double[] {54, 33.4, 23.1, 23, 19};
+	}
+}
+
+class BidAnalyzerTest {
+	BidAnalyzer bidAnalyzer;
+	BidSorter bidSorter;
+	
+	@BeforeEach
+	public void before() {
+		bidSorter = new MockBidSorterWith5Bids();
+		bidAnalyzer = new BidAnalyzer(bidSorter);
+	}
+	
+	void testGetBidWinnersof5Bids() {
+		double[] bids = new double[] {23.1, 54, 33.4, 23, 19};
+		double[] expectedBidWinners = new double[]{54, 33.4, 23.1};
+		
+		double[] actualBidWinners = bidAnalyzer.getBidWinners(bids, 3)
+		assertArrayEquals(expectedBidWinners, actualBidWinners);
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
